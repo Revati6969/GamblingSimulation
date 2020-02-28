@@ -3,9 +3,11 @@
 STAKE=100
 maxLimit=0
 minLimit=0
-DAYS=20
 totalWin=0
 totalLoss=0
+winAmount=0
+
+read -p "Enter the days : " DAYS
 
 dailyBetAmount=$STAKE
 
@@ -43,11 +45,15 @@ function betting()
        if [ $dailyBetAmount -eq $maxLimit ]
        then
            totalWin=$(($maxLimit-$STAKE))
+           winAmount=$(($winAmount+$totalWin))
        else
            totalLoss=$(($STAKE-$minLimit))
+           looseAmount=$(($looseAmount+50))
        fi
        echo "day: $counter  Amount: $dailyBetAmount  Win: $totalWin  Loss:$totalLoss"
 done
+ echo $winAmount
+echo $looseAmount
 }
  
 limit
