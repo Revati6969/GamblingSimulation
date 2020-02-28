@@ -10,11 +10,9 @@ VALUE=50
 dailyBetAmount=$STAKE
 declare -A Dictionary
 
-function limit () 
-{
-   maxLimit=$(($dailyBetAmount+$dailyBetAmount*50/100))
-   minLimit=$(($dailyBetAmount-$dailyBetAmount*50/100))
-}
+
+maxLimit=$(($dailyBetAmount+$dailyBetAmount*50/100))
+minLimit=$(($dailyBetAmount-$dailyBetAmount*50/100))
 
 function betting()
 {
@@ -52,28 +50,45 @@ done
 echo "totalStake: $totalStake"
 }
  
-limit
+function luckyOrNot()
+{
+   echo "your Stakes: " $totalStake
+
+   profitValue=$(printf "%s\n" ${Dictionary[@]} | sort -n | tail -1 )
+   lossValue=$(printf "%s\n" ${Dictionary[@]} | sort -n | head -1 )
+
+   echo profitValue: $profitValue
+   echo lossValue :$lossValue
+
+   echo "day: " ${!Dictionary[@]} 
+   echo "stake: "${Dictionary[@]}
+
+   for key in ${!Dictionary[@]}
+   do
+      if [[ ${Dictionary[$key]} -eq $profitValue ]]
+      then
+         echo "lucky day :$key"
+      fi
+
+      if [[ ${Dictionary[$key]} -eq $lossValue ]]
+      then
+         echo "unlucky day :$key"
+      fi
+	done
+}
+
 betting
+luckyOrNot
 
-echo "your Stakes: " $totalStake
+if [ $totalStake -gt 0 ]
+then
+    read -p "do you want to countinue 1.Yes 2.No :" toCountinue
+    if [ $toCountinue -eq 1 ]
+    then
+        betting
+	luckyOrNot
+    else
+        echo "Game Over"
+    fi
+fi
 
-profitValue=$(printf "%s\n" ${Dictionary[@]} | sort -n | tail -1 )
-lossValue=$(printf "%s\n" ${Dictionary[@]} | sort -n | head -1 )
-
-echo profitValue: $profitValue
-echo lossValue :$lossValue
-
-echo "day: " ${!Dictionary[@]} 
-echo "stake: "${Dictionary[@]}
-for key in ${!Dictionary[@]}
-do
-   if [[ ${Dictionary[$key]} -eq $profitValue ]]
-   then
-      echo "lucky day :$key"
-   fi
-
-   if [[ ${Dictionary[$key]} -eq $lossValue ]]
-   then
-      echo "unlucky day :$key"
-   fi
-done
