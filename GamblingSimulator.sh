@@ -1,19 +1,20 @@
 #!/bin/bash -x
 
+#CONSTANTS
 STAKE=100
 maxLimit=0
 minLimit=0
 DAYS=20
-totalStake=0
 VALUE=50
+#VARIABLES
+totalStake=0
 
 dailyBetAmount=$STAKE
 declare -A Dictionary
 
-
 maxLimit=$(($dailyBetAmount+$dailyBetAmount*50/100))
 minLimit=$(($dailyBetAmount-$dailyBetAmount*50/100))
-
+#BETTING
 function betting()
 {
    for (( counter=1; counter<=$DAYS; counter++ ))
@@ -49,7 +50,7 @@ function betting()
 done
 echo "totalStake: $totalStake"
 }
- 
+#LUCKY DAY OR NOT
 function luckyOrNot()
 {
    echo "your Stakes: " $totalStake
@@ -79,7 +80,7 @@ function luckyOrNot()
 
 betting
 luckyOrNot
-
+#CONTINUE OR NOT
 if [ $totalStake -gt 0 ]
 then
     read -p "do you want to countinue 1.Yes 2.No :" toCountinue
